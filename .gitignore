@@ -1,0 +1,6 @@
+.clang
+*.cbp
+*.user
+__pycache__
+*.pyc
+*.kdev4
