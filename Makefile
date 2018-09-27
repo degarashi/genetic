@@ -6,4 +6,4 @@ OPT_WITHOUT_UNITTEST	= -Dwithout-unittest=$(WITHOUT_UNITTEST)
 ADDITIONAL_CMAKE_OPTION		= $(OPT_WITHOUT_UNITTEST)
 ADDITIONAL_CMD				=
 
-include lubee/common.make
+include src/lubee/common.make
