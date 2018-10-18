@@ -2,13 +2,16 @@ cmake_minimum_required(VERSION 2.8)
 project(genetic)
 
 set(CXX_VERSION 17)
-include(src/lubee/cxx_options.cmake)
+include(lubee/cxx_options.cmake)
 enable_language(CXX)
 
 if(NOT without-unittest)
 	enable_testing()
 	aux_source_directory(src TESTSRC)
 	aux_source_directory(src/tests TESTSRC)
+	include_directories(
+		${CMAKE_CURRENT_SOURCE_DIR}
+	)
 	add_executable(genetic_test ${TESTSRC})
 
 	find_package(Threads REQUIRED)
