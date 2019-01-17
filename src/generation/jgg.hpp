@@ -1,7 +1,6 @@
 #pragma once
+#include "../aux.hpp"
 #include <cstddef>
-#include <cassert>
-#include <random>
 
 namespace gene {
 	// 世代交代モデル：Just Generation Gap
@@ -21,10 +20,6 @@ namespace gene {
 			template <class RAND, class Pool, class Cross, class Mutate>
 			void operator()(RAND& rd, Pool& pool, const Cross& cross, Mutate& mutate) const {
 				assert(pool.nGene() > 1);
-				const auto randI = [&rd](auto... arg){
-					using UD = std::uniform_int_distribution<size_t>;
-					return UD(arg...)(rd);
-				};
 				// 交叉に使う親個体をランダムに抽出
 				const auto parent = pool.extractRandom(rd, _nParent);
 				using Gene = typename Pool::Gene_t;
@@ -33,11 +28,14 @@ namespace gene {
 				// 交叉で選んだ親個体で子個体を生成
 				const auto nc = _nChild;
 				while(child.size() < nc) {
-					const size_t i0 = randI(0, parent.length-2),
-								i1 = randI(i0+1, parent.length-1);
-					auto [c0, c1] = cross(rd, parent.data[i0].gene, parent.data[i1].gene);
-					child.emplace_back(std::move(c0));
-					child.emplace_back(std::move(c1));
+					const auto idx = PickRandomIndices<size_t>(
+										rd,
+										cross.prepare(),
+										parent.length
+									);
+					const auto c = cross.crossover(rd, std::vector<const Gene*>{&(parent.data[idx[0]].gene), &(parent.data[idx[1]].gene)});
+					child.emplace_back(std::move(c[0]));
+					child.emplace_back(std::move(c[1]));
 				}
 				if(child.size() > nc)
 					child.pop_back();

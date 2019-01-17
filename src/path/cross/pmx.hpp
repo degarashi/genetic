@@ -59,11 +59,15 @@ namespace gene::path::cross {
 				return ret;
 			}
 		public:
+			size_t prepare() const noexcept {
+				return 2;
+			}
 			template <class RAND, class Gene>
-			std::pair<Gene, Gene> operator()(RAND& rd, const Gene& src0, const Gene& src1) const {
+			std::vector<Gene> crossover(RAND& rd, const std::vector<const Gene*>& src) const {
+				assert(src.size() == 2);
 				// 同じ長さの遺伝子(2以上)が対象
-				const auto len = src0.length();
-				assert(len == src1.length());
+				const auto len = src[0]->length();
+				assert(len == src[1]->length());
 				using UD = std::uniform_int_distribution<size_t>;
 				// 交叉する地点を2点、決める
 				const size_t i0 = UD(0, len-1)(rd),
@@ -71,8 +75,8 @@ namespace gene::path::cross {
 				assert(i0 != i1);
 
 				return {
-					_make(i0, i1, src0, src1),
-					_make(i0, i1, src1, src0)
+					_make(i0, i1, *src[0], *src[1]),
+					_make(i0, i1, *src[1], *src[0])
 				};
 			}
 	};

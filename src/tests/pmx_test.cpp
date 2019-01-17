@@ -30,11 +30,13 @@ namespace gene::test {
 		const size_t geneLen = randI(1, 64);
 		const auto g0 = Gene::MakeRandom(mt, geneLen),
 					g1 = Gene::MakeRandom(mt, geneLen);
-		const auto [ng0, ng1] = pmx(mt, g0, g1);
+		ASSERT_EQ(2, pmx.prepare());
+		const auto ng = pmx.crossover(mt, std::vector<const Gene*>{&g0, &g1});
+		ASSERT_EQ(2, ng.size());
 
 		// 交叉させた遺伝子の番号が重複してないか
-		ASSERT_TRUE(ng0.checkValidness());
-		ASSERT_TRUE(ng1.checkValidness());
+		ASSERT_TRUE(ng[0].checkValidness());
+		ASSERT_TRUE(ng[1].checkValidness());
 	}
 	TEST_F(Crossover, Equal) {
 		auto& mt = this->mt().refMt();
@@ -42,11 +44,13 @@ namespace gene::test {
 		path::cross::PartiallyMapped pmx;
 
 		const auto g0 = Gene::MakeRandom(mt, 32);
-		const auto [ng0, ng1] = pmx(mt, g0, g0);
+		ASSERT_EQ(2, pmx.prepare());
+		const auto ng = pmx.crossover(mt, std::vector<const Gene*>{&g0, &g0});
+		ASSERT_EQ(2, ng.size());
 
 		// 自身と交叉したら同一の遺伝子が生成される
-		ASSERT_EQ(g0, ng0);
-		ASSERT_EQ(g0, ng1);
+		ASSERT_EQ(g0, ng[0]);
+		ASSERT_EQ(g0, ng[1]);
 	}
 	using Env = lubee::test::Random;
 	TEST_F(Env, Regular) {
