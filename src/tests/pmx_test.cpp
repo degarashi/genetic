@@ -1,7 +1,7 @@
 #include "lubee/src/tests/test.hpp"
 #include "../path/gene.hpp"
 #include "../environment.hpp"
-#include "../pmx.hpp"
+#include "../path/cross/pmx.hpp"
 #include "../jgg.hpp"
 #include "../bernoulli.hpp"
 #include "../mutate/swap.hpp"
