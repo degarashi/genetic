@@ -4,7 +4,7 @@
 #include <vector>
 #include <random>
 
-namespace gene::order::cross {
+namespace gene::path::cross {
 	// 部分写像交叉 (PMX) 二点交叉
 	class PartiallyMapped {
 		private:

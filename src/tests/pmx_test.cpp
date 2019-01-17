@@ -22,7 +22,7 @@ namespace gene::test {
 	TEST_F(Crossover, Regular) {
 		auto& mt = this->mt().refMt();
 		using Gene = path::VariableGene<int>;
-		order::cross::PartiallyMapped pmx;
+		path::cross::PartiallyMapped pmx;
 
 		const auto randI = [&mt=this->mt()](auto... arg){
 			return mt.getUniform<size_t>({arg...});
@@ -39,7 +39,7 @@ namespace gene::test {
 	TEST_F(Crossover, Equal) {
 		auto& mt = this->mt().refMt();
 		using Gene = path::VariableGene<int>;
-		order::cross::PartiallyMapped pmx;
+		path::cross::PartiallyMapped pmx;
 
 		const auto g0 = Gene::MakeRandom(mt, 32);
 		const auto [ng0, ng1] = pmx(mt, g0, g0);
@@ -52,7 +52,7 @@ namespace gene::test {
 	TEST_F(Env, Regular) {
 		auto& mt = this->mt().refMt();
 		using Gene = path::VariableGene<int>;
-		using PMX = order::cross::PartiallyMapped;
+		using PMX = path::cross::PartiallyMapped;
 		using Mutate = Bernoulli<mutate::Swap>;
 		using Env_t = Environment<std::mt19937, Gene, Fit_Ascend, PMX, Mutate, JustGenerationGap>;
 		constexpr size_t GeneLen = 8,
