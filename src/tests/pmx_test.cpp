@@ -2,7 +2,7 @@
 #include "../path/gene.hpp"
 #include "../environment.hpp"
 #include "../path/cross/pmx.hpp"
-#include "../jgg.hpp"
+#include "../generation/jgg.hpp"
 #include "../bernoulli.hpp"
 #include "../mutate/swap.hpp"
 
