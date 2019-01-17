@@ -1,7 +1,7 @@
 #pragma once
-#include "gene.hpp"
-#include "ptrlen.hpp"
-#include "explode.hpp"
+#include "../gene.hpp"
+#include "../ptrlen.hpp"
+#include "../explode.hpp"
 #include <random>
 #include <algorithm>
 #include <iostream>
