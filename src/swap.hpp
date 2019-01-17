@@ -1,7 +1,7 @@
 #pragma once
 #include <random>
 
-namespace gene::order::mutate {
+namespace gene::mutate {
 	// 突然変異操作： 要素を一箇所スワップ
 	class Swap {
 		public:
