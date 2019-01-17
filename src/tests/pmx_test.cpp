@@ -4,7 +4,7 @@
 #include "../pmx.hpp"
 #include "../jgg.hpp"
 #include "../bernoulli.hpp"
-#include "../swap.hpp"
+#include "../mutate/swap.hpp"
 
 class Fit_Ascend {
 	public:
