@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace gene::order {
+namespace gene {
 	namespace path {
 		// パス表現
 		template <class T>

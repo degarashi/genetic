@@ -7,7 +7,7 @@ namespace gene::test {
 	using Pool = lubee::test::Random;
 	TEST_F(Pool, Regular) {
 		auto& mt = this->mt().refMt();
-		using Gene = order::path::VariableGene<int>;
+		using Gene = path::VariableGene<int>;
 		using Pool_t = ::gene::Pool<Gene, Fit_Ascend>;
 
 		const auto randI = [&mt=this->mt()](auto... arg){

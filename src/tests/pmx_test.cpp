@@ -11,7 +11,7 @@ namespace gene::test {
 	using VariableGene = lubee::test::Random;
 	TEST_F(VariableGene, Random) {
 		auto& mt = this->mt().refMt();
-		using Gene = order::path::VariableGene<int>;
+		using Gene = path::VariableGene<int>;
 		const auto randI = [&mt=this->mt()](auto... arg){
 			return mt.getUniform<size_t>({arg...});
 		};
@@ -21,7 +21,7 @@ namespace gene::test {
 	using Crossover = lubee::test::Random;
 	TEST_F(Crossover, Regular) {
 		auto& mt = this->mt().refMt();
-		using Gene = order::path::VariableGene<int>;
+		using Gene = path::VariableGene<int>;
 		order::cross::PartiallyMapped pmx;
 
 		const auto randI = [&mt=this->mt()](auto... arg){
@@ -38,7 +38,7 @@ namespace gene::test {
 	}
 	TEST_F(Crossover, Equal) {
 		auto& mt = this->mt().refMt();
-		using Gene = order::path::VariableGene<int>;
+		using Gene = path::VariableGene<int>;
 		order::cross::PartiallyMapped pmx;
 
 		const auto g0 = Gene::MakeRandom(mt, 32);
@@ -51,7 +51,7 @@ namespace gene::test {
 	using Env = lubee::test::Random;
 	TEST_F(Env, Regular) {
 		auto& mt = this->mt().refMt();
-		using Gene = order::path::VariableGene<int>;
+		using Gene = path::VariableGene<int>;
 		using PMX = order::cross::PartiallyMapped;
 		using Mutate = Bernoulli<mutate::Swap>;
 		using Env_t = Environment<std::mt19937, Gene, Fit_Ascend, PMX, Mutate, JustGenerationGap>;
