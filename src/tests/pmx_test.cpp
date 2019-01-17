@@ -140,7 +140,7 @@ namespace gene::test {
 		auto& mt = this->mt().refMt();
 		using Gene = order::path::VariableGene<int>;
 		using PMX = order::cross::PartiallyMapped;
-		using Mutate = order::Bernoulli<mutate::Swap>;
+		using Mutate = Bernoulli<mutate::Swap>;
 		using Env_t = Environment<std::mt19937, Gene, Fit_Ascend, PMX, Mutate, JustGenerationGap>;
 		constexpr size_t GeneLen = 8,
 						Population = 128,

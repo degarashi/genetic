@@ -1,7 +1,7 @@
 #pragma once
 #include <random>
 
-namespace gene::order {
+namespace gene {
 	// ベルヌーイ施行 (一定確率でMutateを実行)
 	template <class Mutate>
 	class Bernoulli {
