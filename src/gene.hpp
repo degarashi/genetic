@@ -2,6 +2,8 @@
 #include "explode.hpp"
 #include <vector>
 #include <iostream>
+#include <algorithm>
+#include <random>
 
 namespace gene {
 	// 長さ可変の数値配列
@@ -25,6 +27,21 @@ namespace gene {
 		}
 		bool operator == (const VariableGene& g) const noexcept {
 			return this->array == g.array;
+		}
+		template <class RAND>
+		static VariableGene MakeRandom(RAND& rd, const size_t len, const value_t min, const value_t max) {
+			VariableGene ret(len);
+			const auto gen = [&rd](auto&& dist){
+				std::generate(ret.begin(), ret.end(), [&rd, &dist](){
+					return dist(rd);
+				});
+			};
+			if constexpr (std::is_floating_point_v<value_t>) {
+				gen(std::uniform_real_distribution{min, max});
+			} else {
+				gen(std::uniform_int_distribution{min, max});
+			}
+			return ret;
 		}
 	};
 	template <class T>

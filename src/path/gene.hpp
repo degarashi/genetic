@@ -1,8 +1,6 @@
 #pragma once
 #include "../gene.hpp"
 #include "../ptrlen.hpp"
-#include <random>
-#include <algorithm>
 
 namespace gene {
 	namespace path {
