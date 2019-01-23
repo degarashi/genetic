@@ -19,7 +19,7 @@ namespace gene::test {
 		ASSERT_TRUE(gene.checkValidness());
 	}
 	using Crossover = lubee::test::Random;
-	TEST_F(Crossover, Regular) {
+	TEST_F(Crossover, PMX) {
 		auto& mt = this->mt().refMt();
 		using Gene = path::VariableGene<int>;
 		path::cross::PartiallyMapped pmx;
