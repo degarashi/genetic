@@ -1,5 +1,7 @@
 #pragma once
+#include "explode.hpp"
 #include <vector>
+#include <iostream>
 
 namespace gene {
 	// 長さ可変の数値配列
@@ -25,6 +27,12 @@ namespace gene {
 			return this->array == g.array;
 		}
 	};
+	template <class T>
+	std::ostream& operator << (std::ostream& os, const VariableGene<T>& g) {
+		os << "[";
+		Explode(os, g.array.begin(), g.array.end(), ", ");
+		return os << "]";
+	}
 	// 固定長の数値配列
 	// 長さ可変のビット配列
 	// 固定長のビット配列

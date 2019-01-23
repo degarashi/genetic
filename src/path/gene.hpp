@@ -1,10 +1,8 @@
 #pragma once
 #include "../gene.hpp"
 #include "../ptrlen.hpp"
-#include "../explode.hpp"
 #include <random>
 #include <algorithm>
-#include <iostream>
 
 namespace gene {
 	namespace path {
@@ -39,11 +37,5 @@ namespace gene {
 				return ret;
 			}
 		};
-		template <class T>
-		std::ostream& operator << (std::ostream& os, const VariableGene<T>& g) {
-			os << "[";
-			Explode(os, g.array.begin(), g.array.end(), ", ");
-			return os << "]";
-		}
 	}
 }
