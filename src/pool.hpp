@@ -44,7 +44,7 @@ namespace gene {
 			const Ent& getBest() {
 				assert(!_gene.empty());
 				Score best = std::numeric_limits<Score>::lowest();
-				const Ent* e = nullptr;
+				const Ent* e = &_gene.front();
 				for(auto& ent : _gene) {
 					if(best < ent.score) {
 						best = ent.score;
