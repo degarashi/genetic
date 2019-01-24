@@ -42,6 +42,13 @@ namespace gene {
 			}
 
 		public:
+			auto begin() const noexcept { return _m.begin(); }
+			auto begin() noexcept { return _m.begin(); }
+			auto cbegin() const noexcept { return _m.cbegin(); }
+			auto end() const noexcept { return _m.end(); }
+			auto end() noexcept { return _m.end(); }
+			auto cend() const noexcept { return _m.cend(); }
+
 			size_t size() const noexcept {
 				return _m.size();
 			}
