@@ -66,17 +66,32 @@ namespace gene::test {
 						NParent = 32,
 						NChild = 64;
 		constexpr double MutateP = 0.01;
+		Fit_Ascend fit;
 		Env_t env(
 				mt,
-				Fit_Ascend(),
+				fit,
 				PMX(),
 				Mutate(MutateP, mutate::Swap()),
 				JustGenerationGap(NParent, NChild),
 				Population,
 				GeneLen
 		);
-		for(size_t i=0 ; i<16; i++) {
-			env.advance();
+		// 理想スコア
+		double ideal;
+		{
+			Gene idealG(GeneLen);
+			std::iota(idealG.begin(), idealG.end(), 0);
+			ideal = fit(idealG);
 		}
+		constexpr const size_t MaxIteration = 0x10000;
+		for(size_t i=0 ; i<MaxIteration ; i++) {
+			env.advance();
+			// 理想スコアに達したら終了
+			if(fit(env.getBest().gene) == ideal) {
+				return;
+			}
+		}
+		// MaxIteration回数処理しても理想スコアに達しない場合はアルゴリズムに問題がある可能性が非常に高い
+		FAIL();
 	}
 }
