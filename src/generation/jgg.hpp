@@ -27,22 +27,23 @@ namespace gene {
 
 				// 交叉で選んだ親個体で子個体を生成
 				const auto nc = _nChild;
+				std::vector<const Gene*> ptr;
 				while(child.size() < nc) {
+					const auto nParent = cross.prepare();
 					const auto idx = PickRandomIndices<size_t>(
 										rd,
-										cross.prepare(),
+										nParent,
 										parent.length
 									);
-					const Gene* ptr[2] = {
-						&(parent.data[idx[0]].gene),
-						&(parent.data[idx[1]].gene)
-					};
-					const auto c = cross.crossover(rd, ptr);
-					child.emplace_back(std::move(c[0]));
-					child.emplace_back(std::move(c[1]));
+					ptr.resize(nParent);
+					for(size_t i=0 ; i<nParent ; i++)
+						ptr[i] = &(parent.data[idx[i]].gene);
+					const auto c = cross.crossover(rd, ptr.data());
+					for(auto&& ch : c)
+						child.emplace_back(std::move(ch));
 				}
-				if(child.size() > nc)
-					child.pop_back();
+				// 子個体数の上限補正
+				child.resize(std::min(child.size(), nc));
 
 				// 交叉に使った親個体は取り除く
 				pool.popBack(parent.length);
