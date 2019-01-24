@@ -55,7 +55,7 @@ namespace gene::test {
 		ASSERT_EQ(g0, ng[1]);
 	}
 	using Env = lubee::test::Random;
-	TEST_F(Env, Regular) {
+	TEST_F(Env, PMX) {
 		auto& mt = this->mt().refMt();
 		using Gene = path::VariableGene<int>;
 		using PMX = path::cross::PartiallyMapped;
