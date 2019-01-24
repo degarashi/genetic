@@ -48,8 +48,8 @@ namespace gene {
 			return ret;
 		}
 	};
-	template <class T>
-	std::ostream& operator << (std::ostream& os, const VariableGene<T>& g) {
+	template <class T, class C>
+	std::ostream& operator << (std::ostream& os, const VariableGene<T,C>& g) {
 		os << "[";
 		Explode(os, g.begin(), g.end(), ", ");
 		return os << "]";
