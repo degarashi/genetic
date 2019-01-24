@@ -44,7 +44,9 @@ namespace gene {
 
 			// 一世代進める
 			void advance() {
+				const auto nG = _pool.nGene();
 				_generation(_rand, _pool, _cross, _mutate);
+				assert(nG == _pool.nGene());
 			}
 			// 一番成績の良かった遺伝子を返す
 			const GeneEnt_t& getBest() {
