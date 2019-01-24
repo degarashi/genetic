@@ -24,7 +24,7 @@ namespace gene::test {
 			std::vector<const Gene*> parent(nGene);
 			for(size_t i=0 ; i<nGene ; i++)
 				parent[i] = &gene[i];
-			const auto child = spx.crossover(mt, parent);
+			const auto child = spx.crossover(mt, parent.data());
 			ASSERT_EQ(parent.size(), child.size());
 
 			// 重心

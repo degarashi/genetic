@@ -14,6 +14,10 @@ namespace gene::real::cross {
 
 			size_t		_dim;
 			value_t		_eps;
+
+			size_t _nParent() const noexcept {
+				return _dim + 1;
+			}
 		public:
 			Simplex(const size_t dim, const value_t eps):
 				_dim(dim),
@@ -25,18 +29,16 @@ namespace gene::real::cross {
 				Simplex(dim, std::sqrt(dim+2))
 			{}
 			size_t prepare() const noexcept {
-				return _dim + 1;
+				return _nParent();
 			}
 			template <class RAND, class Gene>
-			std::vector<Gene> crossover(RAND& rd, const std::vector<const Gene*>& src) const {
-				const auto size = src.size();
-				assert(size == _dim+1);
-				assert(src.at(0)->length() == _dim);
+			std::vector<Gene> crossover(RAND& rd, const Gene** src) const {
+				assert(src[0]->length() == _dim);
 
 				vec_t g(_dim, 0);
-				for(auto&& s : src) {
-					g += *s;
-				}
+				const auto size = _nParent();
+				for(size_t i=0 ; i<size ; i++)
+					g += *src[i];
 				g /= size;
 
 				std::vector<vec_t>		s(_dim+1);

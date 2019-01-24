@@ -33,7 +33,11 @@ namespace gene {
 										cross.prepare(),
 										parent.length
 									);
-					const auto c = cross.crossover(rd, std::vector<const Gene*>{&(parent.data[idx[0]].gene), &(parent.data[idx[1]].gene)});
+					const Gene* ptr[2] = {
+						&(parent.data[idx[0]].gene),
+						&(parent.data[idx[1]].gene)
+					};
+					const auto c = cross.crossover(rd, ptr);
 					child.emplace_back(std::move(c[0]));
 					child.emplace_back(std::move(c[1]));
 				}

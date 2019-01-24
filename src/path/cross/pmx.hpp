@@ -63,8 +63,7 @@ namespace gene::path::cross {
 				return 2;
 			}
 			template <class RAND, class Gene>
-			std::vector<Gene> crossover(RAND& rd, const std::vector<const Gene*>& src) const {
-				assert(src.size() == 2);
+			std::vector<Gene> crossover(RAND& rd, const Gene** src) const {
 				// 同じ長さの遺伝子(2以上)が対象
 				const auto len = src[0]->length();
 				assert(len == src[1]->length());

@@ -31,7 +31,8 @@ namespace gene::test {
 		const auto g0 = Gene::MakeRandom(mt, geneLen),
 					g1 = Gene::MakeRandom(mt, geneLen);
 		ASSERT_EQ(2, pmx.prepare());
-		const auto ng = pmx.crossover(mt, std::vector<const Gene*>{&g0, &g1});
+		const Gene* parent[2]{&g0, &g1};
+		const auto ng = pmx.crossover(mt, parent);
 		ASSERT_EQ(2, ng.size());
 
 		// 交叉させた遺伝子の番号が重複してないか
@@ -45,7 +46,8 @@ namespace gene::test {
 
 		const auto g0 = Gene::MakeRandom(mt, 32);
 		ASSERT_EQ(2, pmx.prepare());
-		const auto ng = pmx.crossover(mt, std::vector<const Gene*>{&g0, &g0});
+		const Gene* parent[2]{&g0, &g0};
+		const auto ng = pmx.crossover(mt, parent);
 		ASSERT_EQ(2, ng.size());
 
 		// 自身と交叉したら同一の遺伝子が生成される
