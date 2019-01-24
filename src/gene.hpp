@@ -2,39 +2,43 @@
 #include "explode.hpp"
 #include <vector>
 #include <iostream>
-#include <algorithm>
 #include <random>
 
 namespace gene {
 	// 長さ可変の数値配列
-	template <class T>
-	struct VariableGene {
+	template <class T, class Container=std::vector<T>>
+	struct VariableGene :
+		Container
+	{
+		using base_t = Container;
 		using value_t = T;
-		using Ar = std::vector<value_t>;
-		Ar	array;
 
+		VariableGene() = default;
 		VariableGene(const size_t len):
-			array(len)
+			base_t(len)
 		{}
 		size_t length() const noexcept {
-			return array.size();
+			return base_t::size();
 		}
-		value_t& operator [](const size_t n) noexcept {
-			return array[n];
-		}
-		const value_t& operator [](const size_t n) const noexcept {
-			return array[n];
+		VariableGene& operator = (const base_t& v) {
+			data() = v;
+			return *this;
 		}
 		bool operator == (const VariableGene& g) const noexcept {
-			return this->array == g.array;
+			return data() == g.data();
+		}
+		base_t& data() noexcept {
+			return static_cast<base_t&>(*this);
+		}
+		const base_t& data() const noexcept {
+			return static_cast<const base_t&>(*this);
 		}
 		template <class RAND>
 		static VariableGene MakeRandom(RAND& rd, const size_t len, const value_t min, const value_t max) {
 			VariableGene ret(len);
-			const auto gen = [&rd](auto&& dist){
-				std::generate(ret.begin(), ret.end(), [&rd, &dist](){
-					return dist(rd);
-				});
+			const auto gen = [&rd, &ret, len](auto&& dist){
+				for(size_t i=0 ; i<len ; i++)
+					ret[i] = dist(rd);
 			};
 			if constexpr (std::is_floating_point_v<value_t>) {
 				gen(std::uniform_real_distribution{min, max});
@@ -47,7 +51,7 @@ namespace gene {
 	template <class T>
 	std::ostream& operator << (std::ostream& os, const VariableGene<T>& g) {
 		os << "[";
-		Explode(os, g.array.begin(), g.array.end(), ", ");
+		Explode(os, g.begin(), g.end(), ", ");
 		return os << "]";
 	}
 	// 固定長の数値配列

@@ -17,7 +17,7 @@ namespace gene {
 			// 同じ番号が重複していないか、順列になっているかを確認
 			bool checkValidness() const noexcept {
 				const auto len = this->length();
-				auto tmp = this->array;
+				typename base_t::base_t tmp = *this;
 				std::sort(tmp.begin(), tmp.end());
 				for(size_t i=0 ; i<len ; i++) {
 					if(tmp[i] != value_t(i))
@@ -29,9 +29,8 @@ namespace gene {
 			template <class RAND>
 			static VariableGene MakeRandom(RAND& rd, const size_t len) {
 				VariableGene ret(len);
-				auto& ar = ret.array;
-				std::iota(ar.begin(), ar.end(), 0);
-				std::shuffle(ar.begin(), ar.end(), rd);
+				std::iota(ret.begin(), ret.end(), 0);
+				std::shuffle(ret.begin(), ret.end(), rd);
 				return ret;
 			}
 		};
