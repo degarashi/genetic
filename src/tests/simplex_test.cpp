@@ -104,7 +104,7 @@ namespace gene::test {
 		Fit_Factorial fit;
 		Env_t env(
 			mt,
-			Pool_t(mt, fit, Population, GeneLen, 0, 1e2),
+			Pool_t(mt, fit, NoClip{}, Population, GeneLen, 0, 1e2),
 			Simplex(GeneLen),
 			Mutate(MutateP, mutate::Uniform<double>(0, 1e2)),
 			JustGenerationGap(NParent, NChild)

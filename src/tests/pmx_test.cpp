@@ -70,7 +70,7 @@ namespace gene::test {
 		Fit_Ascend fit;
 		Env_t env(
 			mt,
-			Pool_t(mt, fit, Population, GeneLen),
+			Pool_t(mt, fit, NoClip{}, Population, GeneLen),
 			PMX(),
 			Mutate(MutateP, mutate::Swap()),
 			JustGenerationGap(NParent, NChild)

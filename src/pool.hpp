@@ -7,8 +7,12 @@
 #include <cassert>
 
 namespace gene {
+	struct NoClip {
+		template <class Gene>
+		void operator ()(Gene&) const noexcept {}
+	};
 	// 遺伝子プール
-	template <class Gene, class Fit>
+	template <class Gene, class Fit, class Clip=NoClip>
 	class Pool {
 		public:
 			using Score = decltype(std::declval<Fit>()(std::declval<Gene>()));
@@ -29,19 +33,33 @@ namespace gene {
 			using EntV = std::vector<Ent>;
 
 			Fit		_fit;
+			// 無効な値のクリップ
+			// Poolクラスにおいてランダムに遺伝子を生成した後
+			// または遺伝子を取り出し交叉&突然変異を経た後戻す前に呼ばれる
+			Clip	_clip;
 			EntV	_gene;
 
 		public:
 			template <
 				class RAND,
 				class FitA,
+				class ClipA,
 				class... Args
 			>
-			Pool(RAND& rd, FitA&& fit, const size_t population, const Args&... args):
-				_fit(std::forward<FitA>(fit))
+			Pool(
+				RAND& rd,
+				FitA&& fit,
+				ClipA&& clip,
+				const size_t population,
+				const Args&... args
+			):
+				_fit(std::forward<FitA>(fit)),
+				_clip(std::forward<ClipA>(clip))
 			{
 				for(size_t i=0 ; i<population ; i++) {
-					_gene.emplace_back(Gene::MakeRandom(rd, args...), _fit);
+					auto g = Gene::MakeRandom(rd, args...);
+					_clip(g);
+					_gene.emplace_back(std::move(g), _fit);
 				}
 			}
 
@@ -90,6 +108,7 @@ namespace gene {
 			template <class Itr>
 			void put(Itr itr, const Itr itrE) {
 				while(itr != itrE) {
+					_clip(*itr);
 					_gene.emplace_back(std::move(*itr++), _fit);
 				}
 			}
@@ -99,6 +118,7 @@ namespace gene {
 				assert(std::ptrdiff_t(nPut) <= (itrE-itr));
 				EntV tmp;
 				while(itr != itrE) {
+					_clip(*itr);
 					tmp.emplace_back(std::move(*itr), _fit);
 					++itr;
 				}

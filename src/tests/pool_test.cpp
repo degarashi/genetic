@@ -15,7 +15,7 @@ namespace gene::test {
 		};
 		size_t population = randI(0, 32);
 		const size_t geneLength = randI(1, 32);
-		Pool_t pool(mt, Fit_Ascend(), population, geneLength);
+		Pool_t pool(mt, Fit_Ascend(), NoClip{}, population, geneLength);
 		ASSERT_EQ(population, pool.nGene());
 
 		size_t nAct = randI(1, 32);
