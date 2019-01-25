@@ -11,9 +11,6 @@ namespace gene {
 			using base_t::base_t;
 			using value_t = typename base_t::value_t;
 
-			PtrLen<const value_t> getPath() const {
-				return {this->array.data(), this->length()};
-			}
 			// 同じ番号が重複していないか、順列になっているかを確認
 			bool checkValidness() const noexcept {
 				const auto len = this->length();
