@@ -32,9 +32,13 @@ namespace gene {
 			EntV	_gene;
 
 		public:
-			template <class RAND, class... Args>
-			Pool(RAND& rd, const Fit& fit, const size_t population, const Args&... args):
-				_fit(fit)
+			template <
+				class RAND,
+				class FitA,
+				class... Args
+			>
+			Pool(RAND& rd, FitA&& fit, const size_t population, const Args&... args):
+				_fit(std::forward<FitA>(fit))
 			{
 				for(size_t i=0 ; i<population ; i++) {
 					_gene.emplace_back(Gene::MakeRandom(rd, args...), _fit);

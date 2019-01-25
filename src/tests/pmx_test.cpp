@@ -60,7 +60,8 @@ namespace gene::test {
 		using Gene = path::VariableGene<int>;
 		using PMX = path::cross::PartiallyMapped;
 		using Mutate = Bernoulli<mutate::Swap>;
-		using Env_t = Environment<std::mt19937, Gene, Fit_Ascend, PMX, Mutate, JustGenerationGap>;
+		using Pool_t = Pool<Gene, Fit_Ascend>;
+		using Env_t = Environment<std::mt19937, Gene, Pool_t, PMX, Mutate, JustGenerationGap>;
 		constexpr size_t GeneLen = 8,
 						Population = 128,
 						NParent = 32,
@@ -68,13 +69,11 @@ namespace gene::test {
 		constexpr double MutateP = 0.01;
 		Fit_Ascend fit;
 		Env_t env(
-				mt,
-				fit,
-				PMX(),
-				Mutate(MutateP, mutate::Swap()),
-				JustGenerationGap(NParent, NChild),
-				Population,
-				GeneLen
+			mt,
+			Pool_t(mt, fit, Population, GeneLen),
+			PMX(),
+			Mutate(MutateP, mutate::Swap()),
+			JustGenerationGap(NParent, NChild)
 		);
 		// 理想スコア
 		double ideal;

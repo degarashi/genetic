@@ -7,37 +7,38 @@ namespace gene {
 	template <
 		class RAND,
 		class Gene,
-		class Fit,
+		class Pool,
 		class Cross,
 		class Mutate,
 		class Generation
 	>
 	class Environment {
 		private:
-			using Pool_t = Pool<Gene,Fit>;
-
 			RAND&		_rand;
-			Pool_t		_pool;
+			Pool		_pool;
 			Cross		_cross;
 			Mutate		_mutate;
 			Generation	_generation;
 
 		public:
-			template <class... Ts>
+			template <
+				class PoolA,
+				class CrossA,
+				class MutateA,
+				class GenerationA
+			>
 			Environment(
 				RAND& rand,
-				const Fit& fit,
-				const Cross& cross,
-				const Mutate& mutate,
-				const Generation& generation,
-				const size_t population,
-				const Ts&... ts
+				PoolA&& pool,
+				CrossA&& cross,
+				MutateA&& mutate,
+				GenerationA&& generation
 			):
 				_rand(rand),
-				_pool(rand, fit, population, ts...),
-				_cross(cross),
-				_mutate(mutate),
-				_generation(generation)
+				_pool(std::forward<PoolA>(pool)),
+				_cross(std::forward<CrossA>(cross)),
+				_mutate(std::forward<MutateA>(mutate)),
+				_generation(std::forward<GenerationA>(generation))
 			{}
 
 			// 一世代進める

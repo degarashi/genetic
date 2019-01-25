@@ -94,7 +94,8 @@ namespace gene::test {
 		using Gene = VariableGene<double, Vec<double>>;
 		using Simplex = real::cross::Simplex;
 		using Mutate = Bernoulli<mutate::Uniform<double>>;
-		using Env_t = Environment<std::mt19937, Gene, Fit_Factorial, Simplex, Mutate, JustGenerationGap>;
+		using Pool_t = Pool<Gene, Fit_Factorial>;
+		using Env_t = Environment<std::mt19937, Gene, Pool_t, Simplex, Mutate, JustGenerationGap>;
 		constexpr const size_t GeneLen = 4,
 						NParent = GeneLen*2,
 						NChild = NParent*16,
@@ -103,13 +104,10 @@ namespace gene::test {
 		Fit_Factorial fit;
 		Env_t env(
 			mt,
-			fit,
+			Pool_t(mt, fit, Population, GeneLen, 0, 1e2),
 			Simplex(GeneLen),
 			Mutate(MutateP, mutate::Uniform<double>(0, 1e2)),
-			JustGenerationGap(NParent, NChild),
-			Population,
-			GeneLen,
-			0, 1e2
+			JustGenerationGap(NParent, NChild)
 		);
 		constexpr const size_t MaxIteration = 0x10000;
 		constexpr const double Threshold = 1e-1;
