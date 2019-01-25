@@ -15,8 +15,6 @@ namespace gene {
 	class Environment {
 		private:
 			using Pool_t = Pool<Gene,Fit>;
-			using Score = typename Pool_t::Score;
-			using GeneEnt_t = typename Pool_t::Ent;
 
 			RAND&		_rand;
 			Pool_t		_pool;
@@ -49,7 +47,7 @@ namespace gene {
 				assert(nG == _pool.nGene());
 			}
 			// 一番成績の良かった遺伝子を返す
-			const GeneEnt_t& getBest() {
+			decltype(auto) getBest() {
 				return _pool.getBest();
 			}
 	};
