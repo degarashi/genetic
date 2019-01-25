@@ -18,7 +18,7 @@ namespace gene {
 				assert(nChild >= nParent);
 			}
 			template <class RAND, class Pool, class Cross, class Mutate>
-			void operator()(RAND& rd, Pool& pool, const Cross& cross, Mutate& mutate) const {
+			void operator()(RAND& rd, Pool& pool, Cross&& cross, Mutate&& mutate) const {
 				assert(pool.nGene() > 1);
 				// 交叉に使う親個体をランダムに抽出
 				const auto parent = pool.extractRandom(rd, _nParent);
