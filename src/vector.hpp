@@ -64,6 +64,9 @@ namespace gene {
 			explicit Vec(const container_t& data):
 				_m(data)
 			{}
+			void resize(const size_t n) {
+				_m.resize(n);
+			}
 			Vec operator * (const value_t r) const noexcept {
 				return _op(std::multiplies{}, Scalar{r});
 			}
