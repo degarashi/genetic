@@ -2,9 +2,89 @@
 #include "fit_ascend.hpp"
 #include "../path/gene.hpp"
 #include "../pool.hpp"
+#include  "lubee/src/compare.hpp"
 
 namespace gene::test {
 	using Pool = lubee::test::Random;
+	namespace {
+		template <class T>
+		struct Fit_Zero {
+			using range_t = lubee::Range<T>;
+			range_t		_range;
+			Fit_Zero(const range_t r):
+				_range(r)
+			{}
+
+			template <class Gene>
+			double operator()(const Gene& g) const {
+				// 評価の時点で値が適正範囲に収まっている事を確認
+				for(auto&& gv : g) {
+					if(!_range.hit(gv))
+						throw "Assertion failed";
+				}
+				return 0;
+			}
+		};
+		template <class T>
+		struct ClipVal {
+			using range_t = lubee::Range<T>;
+			range_t		_range;
+			ClipVal(const range_t r):
+				_range(r)
+			{}
+			template <class Gene>
+			void operator()(Gene& g) const noexcept {
+				for(auto&& gv : g)
+					gv = std::min(_range.to, std::max(gv, _range.from));
+			}
+		};
+	}
+	TEST_F(Pool, Clip) {
+		auto& mt = this->mt().refMt();
+		using value_t = int;
+		using Gene = VariableGene<value_t>;
+		using L = std::numeric_limits<value_t>;
+		using Clip_t = ClipVal<value_t>;
+		using Pool_t = ::gene::Pool<Gene, Fit_Zero<value_t>, Clip_t>;
+		const auto randI = [&mt=this->mt()](auto... arg){
+			return mt.getUniform<size_t>({arg...});
+		};
+		const size_t population = randI(1, 32);
+		const size_t geneLength = randI(1, 32);
+		const lubee::Range<value_t> range(L::lowest()/2, L::max()/2);
+		Pool_t pool(mt, Fit_Zero(range), Clip_t(range), population, geneLength, L::lowest(), L::max());
+
+		const auto chk = [&pool, range, geneLength](){
+			const auto gene = pool.getSorted();
+			for(size_t i=0 ; i<gene.length ; i++) {
+				for(size_t j=0 ; j<geneLength ; j++)
+					ASSERT_TRUE(lubee::IsInRange(gene.data[i].gene[j], range.from, range.to));
+			}
+		};
+		// Init直後の状態をチェック
+		chk();
+
+		const auto makePut = [&randI, &mt, geneLength](){
+			const size_t np = randI(1, 32);
+			std::vector<Gene> toPut(np);
+			for(size_t i=0 ; i<np ; i++) {
+				toPut[i] = Gene::MakeRandom(mt, geneLength, L::lowest(), L::max());
+			}
+			return toPut;
+		};
+		// put後のチェック
+		{
+			auto p = makePut();
+			pool.put(p.begin(), p.end());
+			chk();
+		}
+		// // putPrime後のチェック
+		{
+			auto p = makePut();
+			pool.putPrime(p.begin(), p.end(), randI(1, p.size()));
+			chk();
+		}
+	}
 	TEST_F(Pool, Regular) {
 		auto& mt = this->mt().refMt();
 		using Gene = path::VariableGene<int>;
